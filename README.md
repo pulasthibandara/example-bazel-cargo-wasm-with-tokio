@@ -1,30 +1,20 @@
-# Bazel Rust Project
+# example-bazel-cargo-wasm-with-tokio
 
-This is a Bazel workspace configured for Rust development. It demonstrates the integration between Bazel build system and Rust/Cargo.
+An example of using Rust target triples to allow bazel to compile a project with Linux and WASM targets with tokio platform dependencies.
 
-## Project Structure
+Adding non-wasm dependencies under `[target.'cfg(not(target_arch = "wasm32"))'.dependencies]` in the `Cargo.toml` file will ensure they are only included in the Linux build.
 
-- `WORKSPACE`: Contains Bazel workspace configuration and external dependencies
-- `src/client`: A sample Rust crate
-- `.bazelrc`: Bazel configuration file
+ex:
+
+```toml
+[target.'cfg(not(target_arch = "wasm32"))'.dependencies]
+tokio = { workspace = true, features = ["full"] }
+```
 
 ## Building
 
-To build the project:
+To build projects:
 
 ```bash
-bazel build //src/client
+bazel build //...
 ```
-
-To run the hello world example:
-
-```bash
-bazel run //src/client
-```
-
-## Development
-
-This project uses Bazel for build management while maintaining compatibility with Cargo. You can use either build system:
-
-- Use `bazel build //...` to build all targets
-- Use `cargo build` in individual crate directories for Cargo builds
