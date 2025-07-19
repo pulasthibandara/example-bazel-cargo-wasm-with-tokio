@@ -1,0 +1,4 @@
+build --enable_platform_specific_config
+
+# Enable Bzlmod for every build
+common --enable_bzlmod

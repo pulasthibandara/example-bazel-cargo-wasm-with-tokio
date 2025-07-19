@@ -1,0 +1,6 @@
+target
+bazel-bazel-crate-universe
+bazel-bin
+bazel-out
+bazel-testlogs
+bazel-*

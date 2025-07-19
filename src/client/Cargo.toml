@@ -1,0 +1,9 @@
+[package]
+name = "client"
+version.workspace = true
+edition.workspace = true
+
+
+[dependencies]
+tokio.workspace = true
+# Dependencies will inherit versions from workspace

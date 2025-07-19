@@ -1,0 +1,13 @@
+# Export all Cargo.toml files for crates universe
+exports_files([
+    "Cargo.toml",
+    "Cargo.lock",
+])
+
+# WASM toolchain
+
+toolchain(
+    name = "wasm_bindgen_toolchain",
+    toolchain = "wasm_bindgen_toolchain_impl",
+    toolchain_type = "@rules_rust_wasm_bindgen//:toolchain_type",
+)

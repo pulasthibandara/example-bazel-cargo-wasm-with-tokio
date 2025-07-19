@@ -1,0 +1,70 @@
+"""bazelbuild/rules_rust - bzlmod example"""
+
+module(
+    name = "bazel_crate_universe",
+    version = "0.0.0",
+)
+
+bazel_dep(name = "rules_rust", version = "0.62.0")
+
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "bazel_skylib", version = "1.7.1")
+bazel_dep(name = "rules_rust_wasm_bindgen", version = "0.62.0")
+bazel_dep(name = "rules_rust_bindgen", version = "0.62.0")
+
+RUST_EDITION = "2024"
+
+RUST_VERSION = "1.87.0"
+
+rust = use_extension("@rules_rust//rust:extensions.bzl", "rust")
+rust.toolchain(
+    edition = RUST_EDITION,
+    extra_target_triples = [
+        "x86_64-unknown-linux-gnu",
+        "aarch64-unknown-linux-gnu",
+        "wasm32-unknown-unknown",
+        # "aarch64-apple-ios",
+        # "aarch64-apple-ios-sim",
+        # "aarch64-linux-android",
+        # "x86_64-linux-android",
+    ],
+    versions = [RUST_VERSION],
+)
+use_repo(rust, "rust_toolchains")
+
+register_toolchains(
+    "@rust_toolchains//:all",
+)
+
+crate = use_extension(
+    "@rules_rust//crate_universe:extensions.bzl",
+    "crate",
+)
+crate.from_cargo(
+    name = "crates",
+    cargo_lockfile = "//:Cargo.bazel.lock",
+    manifests = [
+        "//:Cargo.toml",
+        "//src/client:Cargo.toml",
+        "//src/server:Cargo.toml",
+    ],
+)
+
+crate.annotation(
+    crate = "tokio",
+    crate_features = [],
+)
+
+use_repo(crate, "crates")
+
+rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_tools")
+rust_host_tools.host_tools(
+    name = "rust_host_tools_nightly",
+    version = "nightly",
+)
+use_repo(
+    rust_host_tools,
+    "rust_host_tools_nightly",
+)
+
+register_toolchains("//:wasm_bindgen_toolchain")
