@@ -50,11 +50,6 @@ crate.from_cargo(
     ],
 )
 
-crate.annotation(
-    crate = "tokio",
-    crate_features = [],
-)
-
 use_repo(crate, "crates")
 
 rust_host_tools = use_extension("@rules_rust//rust:extensions.bzl", "rust_host_tools")
